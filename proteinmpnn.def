@@ -1,0 +1,41 @@
+BootStrap: docker
+From: nvcr.io/nvidia/cuda:11.6.1-cudnn8-devel-ubuntu20.04
+
+%post
+    # Update and install necessary packages
+    apt-get update && apt-get install -y wget git && \
+    rm -rf /var/lib/apt/lists/*
+
+    # Install Miniconda
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /miniconda.sh && \
+    bash /miniconda.sh -b -p /miniconda && \
+    rm /miniconda.sh
+
+    # Add Miniconda to PATH
+    echo "export PATH=/miniconda/bin:\$PATH" >> /environment
+
+    # Create the Conda environment for ProteinMPNN
+    conda env create -f /app/include/proteinmpnn_fastrelax.yml && \
+    conda clean -afy
+
+    # Configure PyRosetta if credentials are required (optional)
+    if [ -n "$PYROSETTA_USERNAME" ] && [ -n "$PYROSETTA_PASSWORD" ]; then
+        echo "channels:" > /root/.condarc
+        echo "- https://${PYROSETTA_USERNAME}:${PYROSETTA_PASSWORD}@conda.graylab.jhu.edu" >> /root/.condarc
+        echo "- conda-forge" >> /root/.condarc
+        echo "- defaults" >> /root/.condarc
+    fi
+
+%environment
+    # Ensure environment variables are set
+    export PATH="/miniconda/bin:$PATH"
+    export PYTHONPATH="/app/mpnn_fr:/app/mpnn_fr/ProteinMPNN:$PYTHONPATH"
+
+%files
+    # Copy the local repository into the container
+    ./dl_binder_design /app
+
+%runscript
+    # Default action when the container is run
+    echo "dl_binder_design container is ready."
+    /bin/bash

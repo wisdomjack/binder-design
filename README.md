@@ -1,4 +1,4 @@
-# 💫 Binder Design Pipeline — Modular Singularity Containers for Protein Binder Design
+# 💫 Binder Design Pipeline — Modular Singularity Containers for Protein Binder Design with RFdifusion
 
 This repository contains a quality-of-life mod for the modern protein engineer.
 
@@ -25,15 +25,6 @@ This container runs [RFdiffusion](https://github.com/RosettaCommons/RFdiffusion)
 
 ---
 
-### Requirements
-
-- NVIDIA GPU with CUDA 11.6 support
-- Singularity version 3.7 or higher
-- Local clone of the RFdiffusion GitHub repository
-- Internet connection for downloading model weights
-
----
-
 ### Instalation
 
 Clone the official RFdiffusion repository into the same directory as your Singularity definition file:
@@ -41,7 +32,7 @@ Clone the official RFdiffusion repository into the same directory as your Singul
 ```bash
 git clone https://github.com/RosettaCommons/RFdiffusion.git
 singularity build RFdiffusion.sif RFdiffusion.def
-```
+
 
 ## ProteinMPNN Container (Singularity)
 
@@ -54,17 +45,6 @@ This container builds and runs [ProteinMPNN](https://github.com/dauparas/Protein
 - PyRosetta configuration support (optional)
 - Designed to work with the `dl_binder_design` fork or standalone MPNN modules
 
----
-
-### Requirements
-
-- NVIDIA GPU with CUDA 11.6 support
-- Singularity version 3.7 or higher
-- Local clone of [dl_binder_design](https://github.com/nrbennet/dl_binder_design) or equivalent MPNN-compatible repo
-- Internet connection for model/environment setup
-- (Optional) PyRosetta credentials for full Relax support
-
----
 
 ### Installation
 
@@ -77,4 +57,28 @@ The bootstrap.sh script is used to unpack and inject Rosetta binaries (brians_sc
 git clone https://github.com/nrbennet/dl_binder_design.git
 ./bootstrap.sh
 singularity build proteinmpnn.sif proteinmpnn.def
+
+## AlphaFold Initial Guess Container (Singularity)
+
+This container builds an AlphaFold2.3.2-based system adapted for initial binder model generation. It integrates AlphaFold into the `dl_binder_design` pipeline, making it modular and deployable on Singularity-based HPC systems.
+
+### Features
+
+- Based on `base-2.3.2.sif` by [@jsgro](https://github.com/jsgro/alphafold_singularity)
+- Custom conda environment for binder design (`af2_binder_design.yml`)
+- All required `.npz` parameter weights are bundled
+- Includes silent_tools for Rosetta-based helper scripts
+
+
+---
+
+### Building the container
+
+
+Download base image
+
+```bash
+wget -O base-2.3.2.sif https://github.com/jsgro/alphafold_singularity/releases/download/v2.3.2/base-2.3.2.sif
+
+singularity build alphafold_initial_guess.sif alphafold_initial_guess.def
 ```

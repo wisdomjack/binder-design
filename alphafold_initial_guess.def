@@ -1,0 +1,43 @@
+Bootstrap: localimage
+From: base-2.3.2.sif
+
+%files
+    # Include necessary files from your host into the container
+    params_model_*.npz /opt/alphafold_initial_guess/af2_initial_guess/model_weights/params/
+    LICENSE /opt/alphafold_initial_guess/af2_initial_guess/model_weights/params/LICENSE
+    dl_binder_design/af2_initial_guess /opt/alphafold_initial_guess
+    dl_binder_design/include/af2_binder_design.yml /opt/alphafold_initial_guess/include/af2_binder_design.yml
+    # Include silent tools directory
+    dl_binder_design/include/silent_tools /opt/silent_tools
+
+%post
+    export TMPDIR=/home/gurkov/tmp
+    # Setup Miniconda
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O Miniconda.sh
+    bash Miniconda.sh -b -p /opt/miniconda
+    rm Miniconda.sh
+    export PATH=/opt/miniconda/bin:$PATH
+
+    # Ensure Conda is initialized properly in all shell sessions
+    . /opt/miniconda/etc/profile.d/conda.sh
+
+    # Configure Conda to include the PyRosetta channel with your credentials
+    echo "channels:" > ~/.condarc
+    echo "  - https://levinthal:paradox@conda.graylab.jhu.edu" >> ~/.condarc
+    echo "  - conda-forge" >> ~/.condarc
+    echo "  - defaults" >> ~/.condarc
+
+    # Create and activate the new Conda environment
+    conda env create -f /opt/alphafold_initial_guess/include/af2_binder_design.yml
+    echo "conda activate alphafold" >> ~/.bashrc
+
+    # Make silent_tools executable
+    chmod +x /opt/silent_tools/*
+
+%environment
+    export TMPDIR=/home/gurkov/tmp
+    export PYTHONPATH=$PYTHONPATH:/opt/alphafold_initial_guess
+    export PYTHONPATH=$PYTHONPATH:/opt/alphafold_initial_guess:/opt/silent_tools
+    export PATH=/opt/miniconda/bin:$PATH:/opt/silent_tools
+    export ALPHAFOLD_PARAMS_PATH=/opt/alphafold_initial_guess/af2_initial_guess/model_weights/params
+

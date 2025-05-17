@@ -32,7 +32,7 @@ Clone the official RFdiffusion repository into the same directory as your Singul
 ```bash
 git clone https://github.com/RosettaCommons/RFdiffusion.git
 singularity build RFdiffusion.sif RFdiffusion.def
-
+```
 
 ## ProteinMPNN Container (Singularity)
 
@@ -57,6 +57,7 @@ The bootstrap.sh script is used to unpack and inject Rosetta binaries (brians_sc
 git clone https://github.com/nrbennet/dl_binder_design.git
 ./bootstrap.sh
 singularity build proteinmpnn.sif proteinmpnn.def
+```
 
 ## AlphaFold Initial Guess Container (Singularity)
 

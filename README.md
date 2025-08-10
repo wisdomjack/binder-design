@@ -66,9 +66,23 @@ git clone https://github.com/nrbennet/dl_binder_design.git
 singularity build proteinmpnn.sif proteinmpnn.def
 ```
 
+
+
 ## AlphaFold Initial Guess Container (Singularity)
 
-This container builds an AlphaFold2.3.2-based system adapted for initial binder model generation. It integrates AlphaFold into the `dl_binder_design` pipeline, making it modular and deployable on Singularity-based HPC systems.
+This container packages **AlphaFold2.3.2 Initial Guess**, a modified AlphaFold2 protocol designed to improve complex prediction in de novo binder design.  
+
+In this context, most failures fall into:  
+- **Type I errors** – the designed binder does not fold into the intended monomeric structure.  
+- **Type II errors** – the binder folds correctly but fails to bind the target.  
+
+Initial Guess specifically addresses **Type II errors** by seeding AlphaFold’s pair representation with the designed backbone and target structure, biasing the model toward the intended interface. This significantly improves multimer prediction success rates and enables early filtering of designs that are unlikely to bind.  
+
+Predictions are scored using **pAE_interaction**, the average predicted alignment error for interchain residue pairs, with values **< 10** strongly correlated to experimentally confirmed binders.  
+
+> **Note:** There is an important trade-off. Too little bias increases false negatives, while too much bias inflates false positives. The Institute for Protein Design demonstrated that initializing with an encoding of the binder–target complex achieves a balanced bias, recovering more accurate complexes without overfitting.
+
+This container makes the **Initial Guess** method fully deployable on **Singularity-based HPC systems** or via **Docker**, enabling reproducible large-scale complex prediction and binder prioritization.
 
 ### Features
 

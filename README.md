@@ -34,7 +34,7 @@ git clone https://github.com/RosettaCommons/RFdiffusion.git
 singularity build RFdiffusion.sif RFdiffusion.def
 ```
 
-## RFdiffusion Container (Dcoker)
+## RFdiffusion Container (Docker)
 While designed for Singularity (ideal for shared HPC environments without root access), the same build is also available as a Docker image for local development or cloud deployment.
 
 ```bash

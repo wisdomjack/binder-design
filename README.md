@@ -82,7 +82,7 @@ Predictions are scored using **pAE_interaction**, the average predicted alignmen
 
 > **Note:** There is an important trade-off. Too little bias increases false negatives, while too much bias inflates false positives. The Institute for Protein Design demonstrated that initializing with an encoding of the binder–target complex achieves a balanced bias, recovering more accurate complexes without overfitting.
 
-This container makes the **Initial Guess** method fully deployable on **Singularity-based HPC systems** or via **Docker**, enabling reproducible large-scale complex prediction and binder prioritization.
+This container makes the **Initial Guess** method fully deployable on **Singularity-based HPC systems** enabling reproducible large-scale complex prediction and binder prioritization.
 
 ### Features
 

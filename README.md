@@ -34,6 +34,13 @@ git clone https://github.com/RosettaCommons/RFdiffusion.git
 singularity build RFdiffusion.sif RFdiffusion.def
 ```
 
+## ## RFdiffusion Container (Dcoker)
+While designed for Singularity (ideal for shared HPC environments without root access), the same build is also available as a Docker image for local development or cloud deployment.
+
+```bash
+docker pull cheems154/my_rfdifusion:9.0
+```
+
 ## ProteinMPNN Container (Singularity)
 
 This container builds and runs [ProteinMPNN](https://github.com/dauparas/ProteinMPNN) using Singularity for use on HPC clusters with NVIDIA GPUs. The container includes a pre-configured Conda environment and can optionally support PyRosetta integration (if licensed credentials are available).
